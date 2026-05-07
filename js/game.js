@@ -267,19 +267,47 @@ function updateLong() {
 }
 function jumpLong() {
   if (long.done || long.jumping) return;
+
   const lineX = window.innerWidth * 0.48;
+  const sandTargetX = window.innerWidth - 280;
   const diff = Math.abs(long.x - lineX);
+
   long.jumping = true;
-  $('#longRunner').classList.add('jump');
-  setTimeout(() => $('#longRunner').classList.remove('jump'), 700);
-  if (diff <= 38) {
-    long.done = true;
-    $('#longMsg').textContent = '¡Salto válido!';
-    setTimeout(() => completeEvent('long'), 650);
-  } else {
-    const msg = long.x < lineX ? 'Saltaste muy temprano.' : 'Saltaste muy tarde.';
-    setTimeout(() => failLong(msg), 650);
+
+  const runner = $('#longRunner');
+  runner.classList.remove('jump');
+
+  const startX = long.x;
+  const endX = sandTargetX;
+  const duration = 900;
+  const startTime = performance.now();
+
+  function animateLongJump(now) {
+    const progress = Math.min((now - startTime) / duration, 1);
+    const arc = Math.sin(progress * Math.PI) * 135;
+
+    long.x = startX + (endX - startX) * progress;
+
+    runner.style.left = `${long.x}px`;
+    runner.style.bottom = `${48 + arc}px`;
+
+    if (progress < 1) {
+      requestAnimationFrame(animateLongJump);
+    } else {
+      runner.style.bottom = '48px';
+
+      if (diff <= 38) {
+        long.done = true;
+        $('#longMsg').textContent = '¡Salto válido! Caíste en la fosa de arena.';
+        setTimeout(() => completeEvent('long'), 500);
+      } else {
+        const msg = startX < lineX ? 'Saltaste muy temprano.' : 'Saltaste muy tarde.';
+        setTimeout(() => failLong(msg), 300);
+      }
+    }
   }
+
+  requestAnimationFrame(animateLongJump);
 }
 function failLong(msg) {
   long.attempts--;
@@ -312,6 +340,19 @@ function updateHammerDots() {
 }
 function hitHammer() {
   if (hammer.done) return;
+  const athlete = $('.hammer-athlete');
+
+  athlete.animate(
+    [
+      { transform: 'scale(1.25) rotate(0deg)' },
+      { transform: 'scale(1.25) rotate(365deg)' }
+    ],
+    {
+      duration: 420,
+      easing: 'ease-in-out'
+    }
+  );
+
   if (hammer.y >= 52 && hammer.y <= 72) {
     hammer.hits++;
     updateHammerDots();
@@ -335,7 +376,7 @@ function hitHammer() {
 // Hurdles
 let hurdles = {};
 function startHurdles() {
-  hurdles = { x: 90, speed: 0, jumping: false, jumpTime: 0, cleared: 0, positions: [280, 455, 630, 805, 980, 1155], done: false };
+  hurdles = { x: 90, speed: 0, jumping: false, jumpTime: 0, cleared: 0, positions: [420, 760, 1100], done: false };
   $('#hurdleCounter').textContent = '0';
   $('#hurdlesMsg').textContent = 'Acelera con C y salta con SPACE.';
   $('#hurdleRunner').style.left = `${hurdles.x}px`;
@@ -383,7 +424,7 @@ function updateHurdles() {
       setTimeout(startHurdles, 850);
     }
   }
-  if (hurdles.cleared >= 6 && hurdles.x > window.innerWidth - 160) {
+  if (hurdles.cleared >= hurdles.positions.length && hurdles.x > window.innerWidth - 160) {
     hurdles.done = true;
     completeEvent('hurdles');
   }
