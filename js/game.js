@@ -325,14 +325,37 @@ function failLong(msg) {
 // Hammer throw
 let hammer = {};
 function startHammer() {
-  hammer = { y: 50, dir: 1, hits: 0, done: false };
+  hammer = {
+    y: 50,
+    dir: 1,
+    hits: 0,
+    done: false,
+    lastTime: performance.now(),
+    speed: 65
+  };
+
   $('#hammerMsg').textContent = 'Busca el timing perfecto.';
   updateHammerDots();
 }
-function updateHammer() {
+
+function updateHammer(now = performance.now()) {
   if (hammer.done) return;
-  hammer.y += hammer.dir * 1.8;
-  if (hammer.y > 93 || hammer.y < 7) hammer.dir *= -1;
+
+  const deltaSeconds = (now - hammer.lastTime) / 1000;
+  hammer.lastTime = now;
+
+  hammer.y += hammer.dir * hammer.speed * deltaSeconds;
+
+  if (hammer.y > 93) {
+    hammer.y = 93;
+    hammer.dir = -1;
+  }
+
+  if (hammer.y < 7) {
+    hammer.y = 7;
+    hammer.dir = 1;
+  }
+
   $('#meterArrow').style.top = `${hammer.y}%`;
 }
 function updateHammerDots() {
@@ -501,7 +524,7 @@ function archHigh() {
   $('#highMsg').textContent = '¡Buena forma!';
 }
 
-function loop() {
+function loop(now) {
   if (state.screen === 'hub') {
     let dx = 0, dy = 0;
     if (state.keys.arrowleft) dx -= 0.45;
@@ -512,7 +535,7 @@ function loop() {
     else $('#player').classList.remove('moving');
   }
   if (state.screen === 'long') updateLong();
-  if (state.screen === 'hammer') updateHammer();
+  if (state.screen === 'hammer') updateHammer(now);
   if (state.screen === 'hurdles') updateHurdles();
   if (state.screen === 'high') updateHigh();
   requestAnimationFrame(loop);
