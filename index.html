@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Curriculum Olimpics | Víctor Benítez</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <main class="game" id="game">
+    <section class="screen active bg-screen menu-bg" id="menuScreen">
+      <div class="shade"></div>
+      <div class="intro-card pixel-box">
+        <h1>Curriculum Olimpics</h1>
+        <p>Compite en 4 pruebas para desbloquear el CV interactivo de Víctor Benítez.</p>
+        <button class="pixel-btn big" id="startBtn">START</button>
+        <p class="mini-help">Flechas para moverte · E para participar · ESC para salir</p>
+      </div>
+    </section>
+
+    <section class="screen bg-screen hub-bg" id="hubScreen">
+      <div class="hud top-hud">
+        <strong>CURRICULUM <span>OLIMPICS</span></strong>
+        <span id="hudProgress">0 / 4 pruebas</span>
+      </div>
+
+      <div class="zone" data-event="long" style="left: 19%; top: 36%;">Salto de Longitud</div>
+      <div class="zone" data-event="hammer" style="left: 75%; top: 36%;">Lanzamiento de Martillo</div>
+      <div class="zone" data-event="hurdles" style="left: 21%; top: 72%;">Salto con Vallas</div>
+      <div class="zone" data-event="high" style="left: 75%; top: 72%;">Salto de Altura</div>
+      <div class="zone podium-zone" data-event="podium" style="left: 50%; top: 49%;">Podio</div>
+
+      <div class="podium-status pixel-box" id="podiumStatus">Faltan 4 pruebas para desbloquear el CV</div>
+
+      <div class="player" id="hubPlayer" aria-label="Atleta principal">
+        <div class="hair"></div><div class="head"></div><div class="body">07</div><div class="legs"></div>
+      </div>
+
+      <button class="participate pixel-box" id="participateBtn">E · PARTICIPAR</button>
+
+      <div class="controls pixel-box">↑ ↓ ← → mover · E participar · ESC regresar</div>
+    </section>
+
+    <section class="screen bg-screen long-bg" id="longScreen">
+      <div class="game-panel long-panel pixel-box">
+        <h2>Salto de Longitud</h2>
+        <p>Mantén <kbd>C</kbd> para correr. Presiona <kbd>SPACE</kbd> sobre la línea de impulso.</p>
+        <p>Intentos: <span id="longAttempts">3</span></p>
+        <div class="power-track"><span id="longPosition"></span><i></i></div>
+      </div>
+      <div class="runner mini-runner" id="longRunner"><div class="hair"></div><div class="head"></div><div class="body">07</div><div class="legs"></div></div>
+      <div class="toast" id="longToast">Corre con C y salta con SPACE.</div>
+      <button class="pixel-btn exit-btn" data-exit>Salir</button>
+    </section>
+
+    <section class="screen bg-screen hammer-bg" id="hammerScreen">
+      <div class="game-panel hammer-panel pixel-box">
+        <h2>Lanzamiento de Martillo</h2>
+        <p>Presiona <kbd>SPACE</kbd> cuando la flecha esté en la zona perfecta.</p>
+        <div class="meter"><div class="needle" id="hammerNeedle"></div></div>
+        <p>Golpes perfectos: <span id="hammerHits">0</span> / 3</p>
+      </div>
+      <div class="toast" id="hammerToast">Busca el centro verde/amarillo.</div>
+      <button class="pixel-btn exit-btn" data-exit>Salir</button>
+    </section>
+
+    <section class="screen bg-screen hurdles-bg" id="hurdlesScreen">
+      <div class="game-panel hurdles-panel pixel-box">
+        <h2>Salto con Vallas</h2>
+        <p>Presiona rápido <kbd>C</kbd> para acelerar y <kbd>SPACE</kbd> para saltar.</p>
+        <p>Vallas superadas: <span id="hurdlesCleared">0</span> / 6</p>
+        <div class="energy"><span id="hurdlesEnergy"></span></div>
+      </div>
+      <div class="runner mini-runner" id="hurdleRunner"><div class="hair"></div><div class="head"></div><div class="body">07</div><div class="legs"></div></div>
+      <div class="toast" id="hurdlesToast">Acelera con C. Salta cuando estés cerca de cada valla.</div>
+      <button class="pixel-btn exit-btn" data-exit>Salir</button>
+    </section>
+
+    <section class="screen bg-screen high-bg" id="highScreen">
+      <div class="game-panel high-panel pixel-box">
+        <h2>Salto de Altura</h2>
+        <p><kbd>C</kbd> correr · <kbd>SPACE</kbd> saltar · <kbd>D</kbd> arquearte en el aire.</p>
+        <p>Intento: <span id="highAttempt">1</span> / 3</p>
+        <div class="power-track"><span id="highPosition"></span><i></i></div>
+      </div>
+      <div class="runner mini-runner" id="highRunner"><div class="hair"></div><div class="head"></div><div class="body">07</div><div class="legs"></div></div>
+      <div class="toast" id="highToast">Salta antes de la barra y presiona D arriba.</div>
+      <button class="pixel-btn exit-btn" data-exit>Salir</button>
+    </section>
+
+    <section class="screen bg-screen victory-bg" id="cvScreen">
+      <div class="cv-card pixel-box">
+        <h1>Perfil de Víctor Benítez</h1>
+        <p class="tagline">Data Science · Data Analytics · Business Intelligence</p>
+        <div class="cv-grid">
+          <article>
+            <h2>Educación</h2>
+            <p><strong>ITAM</strong><br>Data Science, double major · actual<br>Academic Excellence Scholarship</p>
+            <p><strong>ITAM</strong><br>Actuary · actual<br>GPA: 88/100 · Academic Excellence Scholarship</p>
+            <p><strong>UPC Barcelona</strong><br>International Exchange Program · 2025</p>
+          </article>
+          <article>
+            <h2>Experiencia</h2>
+            <p><strong>Enlace Rural</strong><br>Executive Lead · Aug 2024 - Dec 2025<br>Impacto en más de 150 personas a través de 4 proyectos.</p>
+            <p><strong>Enlace Rural</strong><br>Project Coordinator · Aug 2023 - Aug 2024<br>Cursos de educación no formal para más de 50 mujeres en Hidalgo.</p>
+            <p><strong>B1T</strong><br>Vice President · Jan 2026 - Current<br>Representación estudiantil de carreras de computación en ITAM.</p>
+          </article>
+          <article>
+            <h2>Software</h2>
+            <p>Java · Advanced<br>Python · Advanced<br>SQL · Intermediate<br>R · Intermediate<br>C# · Basic<br>GitHub · Intermediate<br>Docker · Basic</p>
+            <h2>Idiomas</h2>
+            <p>Spanish · Native<br>English · Advanced<br>French · Basic</p>
+          </article>
+        </div>
+        <div class="contact-row">
+          <span>📍 México City, México</span>
+          <span>✉️ vbenite1@itam.mx</span>
+          <span>☎️ 55-7338-0734</span>
+        </div>
+        <div class="cv-actions">
+          <a class="pixel-btn" href="assets/cv-victor-benitez.pdf" target="_blank">Abrir CV PDF</a>
+          <button class="pixel-btn" id="restartBtn">Volver a jugar</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="celebration hidden" id="celebration">
+      <div class="confetti"></div>
+      <div class="celebration-athlete">
+        <div class="player celebrate"><div class="hair"></div><div class="head"></div><div class="body">07</div><div class="legs"></div></div>
+        <p>¡PRUEBA SUPERADA!</p>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/game.js"></script>
+</body>
+</html>
