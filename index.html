@@ -7,131 +7,243 @@
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <main class="game" id="game">
-    <section class="screen active bg-screen menu-bg" id="menuScreen">
-      <div class="shade"></div>
-      <div class="intro-card pixel-box">
-        <h1>Curriculum Olimpics</h1>
-        <p>Compite en 4 pruebas para desbloquear el CV interactivo de Víctor Benítez.</p>
-        <button class="pixel-btn big" id="startBtn">START</button>
-        <p class="mini-help">Flechas para moverte · E para participar · ESC para salir</p>
-      </div>
-    </section>
+  <div id="app" class="game-shell">
+    <canvas id="confettiCanvas" aria-hidden="true"></canvas>
 
-    <section class="screen bg-screen hub-bg" id="hubScreen">
-      <div class="hud top-hud">
-        <strong>CURRICULUM <span>OLIMPICS</span></strong>
-        <span id="hudProgress">0 / 4 pruebas</span>
-      </div>
+    <header class="topbar" aria-label="Barra de navegación">
+      <button class="brand" id="navHome" aria-label="Volver al inicio">
+        <span>CURRICULUM</span><strong>OLIMPICS</strong>
+      </button>
 
-      <div class="zone" data-event="long" style="left: 19%; top: 36%;">Salto de Longitud</div>
-      <div class="zone" data-event="hammer" style="left: 75%; top: 36%;">Lanzamiento de Martillo</div>
-      <div class="zone" data-event="hurdles" style="left: 21%; top: 72%;">Salto con Vallas</div>
-      <div class="zone" data-event="high" style="left: 75%; top: 72%;">Salto de Altura</div>
-      <div class="zone podium-zone" data-event="podium" style="left: 50%; top: 49%;">Podio</div>
+      <nav class="top-actions">
+        <button class="nav-btn" id="btnHub">🏟️ Estadio</button>
+        <button class="nav-btn" id="btnProgress">🏅 Progreso</button>
+        <button class="nav-btn locked" id="btnCV">🔒 CV</button>
+        <button class="nav-btn" id="btnReset">↻ Reiniciar</button>
+      </nav>
 
-      <div class="podium-status pixel-box" id="podiumStatus">Faltan 4 pruebas para desbloquear el CV</div>
-
-      <div class="player" id="hubPlayer" aria-label="Atleta principal">
-        <div class="hair"></div><div class="head"></div><div class="body">07</div><div class="legs"></div>
-      </div>
-
-      <button class="participate pixel-box" id="participateBtn">E · PARTICIPAR</button>
-
-      <div class="controls pixel-box">↑ ↓ ← → mover · E participar · ESC regresar</div>
-    </section>
-
-    <section class="screen bg-screen long-bg" id="longScreen">
-      <div class="game-panel long-panel pixel-box">
-        <h2>Salto de Longitud</h2>
-        <p>Mantén <kbd>C</kbd> para correr. Presiona <kbd>SPACE</kbd> sobre la línea de impulso.</p>
-        <p>Intentos: <span id="longAttempts">3</span></p>
-        <div class="power-track"><span id="longPosition"></span><i></i></div>
-      </div>
-      <div class="runner mini-runner" id="longRunner"><div class="hair"></div><div class="head"></div><div class="body">07</div><div class="legs"></div></div>
-      <div class="toast" id="longToast">Corre con C y salta con SPACE.</div>
-      <button class="pixel-btn exit-btn" data-exit>Salir</button>
-    </section>
-
-    <section class="screen bg-screen hammer-bg" id="hammerScreen">
-      <div class="game-panel hammer-panel pixel-box">
-        <h2>Lanzamiento de Martillo</h2>
-        <p>Presiona <kbd>SPACE</kbd> cuando la flecha esté en la zona perfecta.</p>
-        <div class="meter"><div class="needle" id="hammerNeedle"></div></div>
-        <p>Golpes perfectos: <span id="hammerHits">0</span> / 3</p>
-      </div>
-      <div class="toast" id="hammerToast">Busca el centro verde/amarillo.</div>
-      <button class="pixel-btn exit-btn" data-exit>Salir</button>
-    </section>
-
-    <section class="screen bg-screen hurdles-bg" id="hurdlesScreen">
-      <div class="game-panel hurdles-panel pixel-box">
-        <h2>Salto con Vallas</h2>
-        <p>Presiona rápido <kbd>C</kbd> para acelerar y <kbd>SPACE</kbd> para saltar.</p>
-        <p>Vallas superadas: <span id="hurdlesCleared">0</span> / 6</p>
-        <div class="energy"><span id="hurdlesEnergy"></span></div>
-      </div>
-      <div class="runner mini-runner" id="hurdleRunner"><div class="hair"></div><div class="head"></div><div class="body">07</div><div class="legs"></div></div>
-      <div class="toast" id="hurdlesToast">Acelera con C. Salta cuando estés cerca de cada valla.</div>
-      <button class="pixel-btn exit-btn" data-exit>Salir</button>
-    </section>
-
-    <section class="screen bg-screen high-bg" id="highScreen">
-      <div class="game-panel high-panel pixel-box">
-        <h2>Salto de Altura</h2>
-        <p><kbd>C</kbd> correr · <kbd>SPACE</kbd> saltar · <kbd>D</kbd> arquearte en el aire.</p>
-        <p>Intento: <span id="highAttempt">1</span> / 3</p>
-        <div class="power-track"><span id="highPosition"></span><i></i></div>
-      </div>
-      <div class="runner mini-runner" id="highRunner"><div class="hair"></div><div class="head"></div><div class="body">07</div><div class="legs"></div></div>
-      <div class="toast" id="highToast">Salta antes de la barra y presiona D arriba.</div>
-      <button class="pixel-btn exit-btn" data-exit>Salir</button>
-    </section>
-
-    <section class="screen bg-screen victory-bg" id="cvScreen">
-      <div class="cv-card pixel-box">
-        <h1>Perfil de Víctor Benítez</h1>
-        <p class="tagline">Data Science · Data Analytics · Business Intelligence</p>
-        <div class="cv-grid">
-          <article>
-            <h2>Educación</h2>
-            <p><strong>ITAM</strong><br>Data Science, double major · actual<br>Academic Excellence Scholarship</p>
-            <p><strong>ITAM</strong><br>Actuary · actual<br>GPA: 88/100 · Academic Excellence Scholarship</p>
-            <p><strong>UPC Barcelona</strong><br>International Exchange Program · 2025</p>
-          </article>
-          <article>
-            <h2>Experiencia</h2>
-            <p><strong>Enlace Rural</strong><br>Executive Lead · Aug 2024 - Dec 2025<br>Impacto en más de 150 personas a través de 4 proyectos.</p>
-            <p><strong>Enlace Rural</strong><br>Project Coordinator · Aug 2023 - Aug 2024<br>Cursos de educación no formal para más de 50 mujeres en Hidalgo.</p>
-            <p><strong>B1T</strong><br>Vice President · Jan 2026 - Current<br>Representación estudiantil de carreras de computación en ITAM.</p>
-          </article>
-          <article>
-            <h2>Software</h2>
-            <p>Java · Advanced<br>Python · Advanced<br>SQL · Intermediate<br>R · Intermediate<br>C# · Basic<br>GitHub · Intermediate<br>Docker · Basic</p>
-            <h2>Idiomas</h2>
-            <p>Spanish · Native<br>English · Advanced<br>French · Basic</p>
-          </article>
-        </div>
-        <div class="contact-row">
-          <span>📍 México City, México</span>
-          <span>✉️ vbenite1@itam.mx</span>
-          <span>☎️ 55-7338-0734</span>
-        </div>
-        <div class="cv-actions">
-          <a class="pixel-btn" href="assets/cv-victor-benitez.pdf" target="_blank">Abrir CV PDF</a>
-          <button class="pixel-btn" id="restartBtn">Volver a jugar</button>
+      <div class="player-chip" aria-label="Perfil de jugador">
+        <div class="mini-avatar"></div>
+        <div>
+          <strong>Víctor</strong>
+          <small id="topProgressText">0/4 pruebas</small>
         </div>
       </div>
-    </section>
+    </header>
 
-    <div class="celebration hidden" id="celebration">
-      <div class="confetti"></div>
-      <div class="celebration-athlete">
-        <div class="player celebrate"><div class="hair"></div><div class="head"></div><div class="body">07</div><div class="legs"></div></div>
-        <p>¡PRUEBA SUPERADA!</p>
-      </div>
+    <main>
+      <section id="screenTitle" class="screen active title-scene" aria-label="Pantalla de inicio">
+        <div class="stadium-bg">
+          <div class="cloud cloud-1"></div>
+          <div class="cloud cloud-2"></div>
+          <div class="crowd crowd-a"></div>
+          <div class="track-ring"></div>
+          <div class="field-glow"></div>
+        </div>
+
+        <div class="title-card pixel-card">
+          <p class="eyebrow">Bienvenido a</p>
+          <h1>Curriculum<br><span>Olimpics</span></h1>
+          <p>Compite en 4 pruebas, desbloquea logros y llega al podio para descubrir el CV de Víctor Benítez.</p>
+          <div class="title-actions">
+            <button class="primary-btn" id="startGame">START</button>
+            <button class="secondary-btn" id="openInstructions">Instrucciones</button>
+          </div>
+        </div>
+
+        <div class="big-athlete celebrate-idle" aria-hidden="true">
+          <div class="sprite athlete-sprite facing-front">
+            <i class="hair"></i><i class="head"></i><i class="torso"></i><i class="arm arm-l"></i><i class="arm arm-r"></i><i class="leg leg-l"></i><i class="leg leg-r"></i><i class="shoe shoe-l"></i><i class="shoe shoe-r"></i>
+          </div>
+        </div>
+
+        <div class="controls-strip pixel-card">
+          <span><kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd> moverte</span>
+          <span><kbd>E</kbd> participar</span>
+          <span><kbd>ESC</kbd> salir</span>
+        </div>
+      </section>
+
+      <section id="screenHub" class="screen hub-scene" aria-label="Estadio principal">
+        <div class="stadium-bg hub-bg">
+          <div class="cloud cloud-1"></div>
+          <div class="cloud cloud-2"></div>
+          <div class="crowd crowd-a"></div>
+          <div class="track-ring hub-track"></div>
+          <div class="field-glow"></div>
+        </div>
+
+        <div class="hub-sign pixel-card">
+          <strong>Estadio Curriculum Olimpics</strong>
+          <span id="podiumStatus">Te faltan 4 pruebas para desbloquear el podio.</span>
+        </div>
+
+        <button class="event-marker long-marker" data-event="long">
+          <b>1</b><span>Salto de<br>Longitud</span><em class="event-art sandpit"></em>
+        </button>
+        <button class="event-marker hammer-marker" data-event="hammer">
+          <b>2</b><span>Lanzamiento<br>de Martillo</span><em class="event-art hammerzone"></em>
+        </button>
+        <button class="event-marker hurdles-marker" data-event="hurdles">
+          <b>3</b><span>Salto con<br>Vallas</span><em class="event-art hurdlezone"></em>
+        </button>
+        <button class="event-marker high-marker" data-event="high">
+          <b>4</b><span>Salto de<br>Altura</span><em class="event-art highzone"></em>
+        </button>
+
+        <button id="podium" class="podium-area locked-podium" aria-label="Podio bloqueado">
+          <span class="podium-msg" id="podiumMsg">Podio bloqueado<br><small>Faltan 4 pruebas</small></span>
+          <span class="podium-steps"><i>2</i><i>1</i><i>3</i></span>
+        </button>
+
+        <div id="player" class="player-avatar" style="left:50%; top:62%;">
+          <div class="sprite athlete-sprite facing-front">
+            <i class="hair"></i><i class="head"></i><i class="torso"></i><i class="arm arm-l"></i><i class="arm arm-r"></i><i class="leg leg-l"></i><i class="leg leg-r"></i><i class="shoe shoe-l"></i><i class="shoe shoe-r"></i>
+          </div>
+        </div>
+
+        <button id="interactionPrompt" class="interaction-prompt hidden">E Participar</button>
+
+        <aside class="progress-panel pixel-card" id="progressPanel">
+          <h2>Medallero</h2>
+          <ul>
+            <li data-medal="long">⬜ Salto de Longitud</li>
+            <li data-medal="hammer">⬜ Lanzamiento de Martillo</li>
+            <li data-medal="hurdles">⬜ Salto con Vallas</li>
+            <li data-medal="high">⬜ Salto de Altura</li>
+          </ul>
+        </aside>
+      </section>
+
+      <section id="screenLong" class="screen event-screen long-event" aria-label="Salto de longitud">
+        <div class="event-sky"></div>
+        <div class="event-crowd"></div>
+        <div class="event-title pixel-card">1 · Salto de Longitud</div>
+        <div class="attempt-box pixel-card">Intentos <span id="longAttempts">♥ ♥ ♥</span></div>
+        <div class="instruction-card pixel-card">
+          Mantén <kbd>C</kbd> para correr. Presiona <kbd>SPACE</kbd> justo en la línea blanca.
+        </div>
+        <div class="long-track">
+          <div class="takeoff-line"></div>
+          <div class="sand-box"></div>
+          <div id="longRunner" class="runner-sprite"><div class="sprite athlete-sprite side-run"><i class="hair"></i><i class="head"></i><i class="torso"></i><i class="arm arm-l"></i><i class="arm arm-r"></i><i class="leg leg-l"></i><i class="leg leg-r"></i><i class="shoe shoe-l"></i><i class="shoe shoe-r"></i></div></div>
+        </div>
+        <div class="timing-strip pixel-card"><span>Muy temprano</span><b>Zona perfecta</b><span>Muy tarde</span></div>
+        <div id="longMsg" class="event-message pixel-card">Corre y salta en la zona correcta.</div>
+        <button class="exit-btn" data-exit>ESC Salir</button>
+      </section>
+
+      <section id="screenHammer" class="screen event-screen hammer-event" aria-label="Lanzamiento de martillo">
+        <div class="event-sky"></div>
+        <div class="event-crowd"></div>
+        <div class="event-title pixel-card">2 · Lanzamiento de Martillo</div>
+        <div class="instruction-card pixel-card">
+          Presiona <kbd>SPACE</kbd> cuando la flecha esté en la zona verde. Logra 3 aciertos.
+        </div>
+        <div class="hammer-cage">
+          <div class="throw-circle"></div>
+          <div class="hammer-athlete"><div class="sprite athlete-sprite side-run"><i class="hair"></i><i class="head"></i><i class="torso"></i><i class="arm arm-l"></i><i class="arm arm-r"></i><i class="leg leg-l"></i><i class="leg leg-r"></i><i class="shoe shoe-l"></i><i class="shoe shoe-r"></i></div></div>
+          <div class="hammer-ball"></div>
+        </div>
+        <div class="hammer-meter pixel-card">
+          <div id="meterArrow" class="meter-arrow"></div>
+          <div class="meter-gradient"></div>
+        </div>
+        <div class="hit-panel pixel-card">
+          <h3>Golpes exitosos</h3>
+          <div id="hammerHits" class="hit-dots"><span></span><span></span><span></span></div>
+        </div>
+        <div id="hammerMsg" class="event-message pixel-card">Busca el timing perfecto.</div>
+        <button class="exit-btn" data-exit>ESC Salir</button>
+      </section>
+
+      <section id="screenHurdles" class="screen event-screen hurdles-event" aria-label="Salto con vallas">
+        <div class="event-sky"></div>
+        <div class="event-crowd"></div>
+        <div class="event-title pixel-card">3 · Salto con Vallas</div>
+        <div class="progress-counter pixel-card">Vallas: <span id="hurdleCounter">0</span>/6</div>
+        <div class="instruction-card pixel-card">
+          Toca <kbd>C</kbd> rápido para correr. Usa <kbd>SPACE</kbd> para saltar cada valla.
+        </div>
+        <div class="hurdle-track">
+          <div id="hurdleRunner" class="runner-sprite"><div class="sprite athlete-sprite side-run"><i class="hair"></i><i class="head"></i><i class="torso"></i><i class="arm arm-l"></i><i class="arm arm-r"></i><i class="leg leg-l"></i><i class="leg leg-r"></i><i class="shoe shoe-l"></i><i class="shoe shoe-r"></i></div></div>
+          <div id="hurdleSet"></div>
+          <div class="finish"></div>
+        </div>
+        <div class="speedbar pixel-card"><span>Velocidad</span><i id="speedFill"></i></div>
+        <div id="hurdlesMsg" class="event-message pixel-card">Acelera con C y salta con SPACE.</div>
+        <button class="exit-btn" data-exit>ESC Salir</button>
+      </section>
+
+      <section id="screenHigh" class="screen event-screen high-event" aria-label="Salto de altura">
+        <div class="event-sky"></div>
+        <div class="event-crowd"></div>
+        <div class="event-title pixel-card">4 · Salto de Altura</div>
+        <div class="attempt-box pixel-card">Intento <span id="highAttempt">1</span>/3</div>
+        <div class="instruction-card pixel-card">
+          Mantén <kbd>C</kbd>, salta con <kbd>SPACE</kbd> y presiona <kbd>D</kbd> en el aire para arquearte.
+        </div>
+        <div class="high-stage">
+          <div class="high-mat"></div>
+          <div class="high-post left"></div><div class="high-post right"></div><div class="high-bar"></div>
+          <div id="highRunner" class="runner-sprite"><div class="sprite athlete-sprite side-run"><i class="hair"></i><i class="head"></i><i class="torso"></i><i class="arm arm-l"></i><i class="arm arm-r"></i><i class="leg leg-l"></i><i class="leg leg-r"></i><i class="shoe shoe-l"></i><i class="shoe shoe-r"></i></div></div>
+        </div>
+        <div id="highMsg" class="event-message pixel-card">Salta cerca de la barra y arquea el cuerpo.</div>
+        <button class="exit-btn" data-exit>ESC Salir</button>
+      </section>
+
+      <section id="screenCV" class="screen cv-scene" aria-label="Currículum desbloqueado">
+        <div class="stadium-bg">
+          <div class="cloud cloud-1"></div>
+          <div class="cloud cloud-2"></div>
+          <div class="crowd crowd-a"></div>
+          <div class="track-ring"></div>
+          <div class="field-glow"></div>
+        </div>
+        <div class="victory-left pixel-card">
+          <h2>¡Campeón del Curriculum!</h2>
+          <div class="winner-sprite celebrate-idle"><div class="sprite athlete-sprite facing-front"><i class="hair"></i><i class="head"></i><i class="torso"></i><i class="arm arm-l"></i><i class="arm arm-r"></i><i class="leg leg-l"></i><i class="leg leg-r"></i><i class="shoe shoe-l"></i><i class="shoe shoe-r"></i></div></div>
+          <div class="medal-grid">
+            <span>✓ Longitud</span><span>✓ Martillo</span><span>✓ Vallas</span><span>✓ Altura</span>
+          </div>
+        </div>
+        <article class="cv-board pixel-card">
+          <header class="cv-head">
+            <div class="cv-avatar mini-avatar"></div>
+            <div>
+              <p class="eyebrow">Perfil desbloqueado</p>
+              <h1>Víctor Benítez</h1>
+              <p>Data Science · Data Analytics · Business Intelligence</p>
+            </div>
+          </header>
+          <section class="cv-grid">
+            <div class="cv-card"><h3>Contacto</h3><p>Ciudad de México<br>vbenite1@itam.mx<br>55-7338-0734</p></div>
+            <div class="cv-card"><h3>Educación</h3><p>ITAM · Ciencia de Datos<br>ITAM · Actuaría<br>UPC Barcelona · Intercambio 2025</p></div>
+            <div class="cv-card"><h3>Software</h3><p>Java, Python, SQL, R<br>Microsoft Office, GitHub, Docker</p></div>
+            <div class="cv-card"><h3>Experiencia</h3><p>Enlace Rural · Project Coordinator / Executive Lead<br>B1T · Vice President</p></div>
+            <div class="cv-card"><h3>Idiomas</h3><p>Español nativo<br>Inglés avanzado<br>Francés básico</p></div>
+            <div class="cv-card"><h3>Logro clave</h3><p>Impacto social, liderazgo estudiantil, planeación de proyectos y coordinación de equipos.</p></div>
+          </section>
+          <div class="cv-actions">
+            <a class="primary-btn link-btn" href="assets/cv-victor-benitez.pdf" target="_blank" rel="noopener">Abrir CV PDF</a>
+            <button class="secondary-btn" id="playAgain">Volver a jugar</button>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <dialog id="instructionsDialog" class="pixel-dialog">
+      <h2>Cómo jugar</h2>
+      <p>Muévete por el estadio con las flechas. Cuando estés encima de una zona de competencia, presiona E o haz clic en la prueba.</p>
+      <p>Supera las 4 pruebas para desbloquear el podio y acceder al CV de Víctor.</p>
+      <button class="primary-btn" id="closeInstructions">Entendido</button>
+    </dialog>
+
+    <div id="celebration" class="celebration hidden" aria-live="polite">
+      <div class="celebrate-athlete"><div class="sprite athlete-sprite facing-front"><i class="hair"></i><i class="head"></i><i class="torso"></i><i class="arm arm-l"></i><i class="arm arm-r"></i><i class="leg leg-l"></i><i class="leg leg-r"></i><i class="shoe shoe-l"></i><i class="shoe shoe-r"></i></div></div>
+      <div class="celebrate-card pixel-card"><strong id="celebrationTitle">¡Prueba superada!</strong><span id="celebrationText">Siguiente reto desbloqueado.</span></div>
     </div>
-  </main>
+  </div>
 
   <script src="js/game.js"></script>
 </body>
